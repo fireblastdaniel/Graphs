@@ -34,16 +34,14 @@ class Graph:
         """
         visited = {starting_vertex}
         queue = [starting_vertex]
-        output = ''
 
         while queue:
             v = queue.pop(0)
-            output += f'{v}, '
+            print(v)
             for edge in self.vertices[v]:
                 if edge not in visited:
                     queue.append(edge)
                     visited.add(edge)
-        print(output)
 
     def dft(self, starting_vertex):
         """
@@ -52,16 +50,14 @@ class Graph:
         """
         visited = {starting_vertex}
         queue = [starting_vertex]
-        output = ''
 
         while queue:
             v = queue.pop()
-            output += f'{v}, '
+            print(v)
             for edge in self.vertices[v]:
                 if edge not in visited:
                     queue.append(edge)
                     visited.add(edge)
-        print(output)
 
     def dft_recursive(self, starting_vertex):
         """
@@ -119,7 +115,7 @@ class Graph:
 
         This should be done using recursion.
         """
-        print(self.dfs_recursive_visit(starting_vertex, destination_vertex, []))
+        return self.dfs_recursive_visit(starting_vertex, destination_vertex, [])
 
     def dfs_recursive_visit(self, starting_vertex, destination_vertex, path):
         path = path + [starting_vertex]
@@ -133,6 +129,7 @@ class Graph:
                     if not shortest or len(newpath) < len(shortest):
                         shortest = newpath
         return shortest
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph

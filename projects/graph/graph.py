@@ -13,33 +13,55 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        pass  # TODO
+        self.vertices[vertex_id] = set()
 
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph.
         """
-        pass  # TODO
+        self.vertices[v1].add(v2)
 
     def get_neighbors(self, vertex_id):
         """
         Get all neighbors (edges) of a vertex.
         """
-        pass  # TODO
+        return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        visited = {starting_vertex}
+        queue = [starting_vertex]
+        output = ''
+
+        while queue:
+            v = queue.pop(0)
+            output += f'{v}, '
+            for edge in self.vertices[v]:
+                if edge not in visited:
+                    queue.append(edge)
+                    visited.add(edge)
+        print(output)
 
     def dft(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        visited = {starting_vertex}
+        queue = [starting_vertex]
+        output = ''
+
+        while queue:
+            v = queue.pop()
+            output += f'{v}, '
+            for edge in self.vertices[v]:
+                if edge not in visited:
+                    queue.append(edge)
+                    visited.add(edge)
+        print(output)
 
     def dft_recursive(self, starting_vertex):
         """
@@ -48,7 +70,16 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        self.visited = set()
+        self.dft_recursive_visit(starting_vertex)
+
+    def dft_recursive_visit(self, vertex):
+        self.visited.add(vertex)
+        print(vertex)
+
+        for neighbor in self.vertices[vertex]:
+            if neighbor not in self.visited:
+                self.dft_recursive_visit(neighbor)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -56,7 +87,14 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        queue = [(starting_vertex, [starting_vertex])]
+        while queue:
+            (vertex, path) = queue.pop(0)
+            for next in self.vertices[vertex] - set(path):
+                if next == destination_vertex:
+                    return path + [next]
+                else:
+                    queue.append((next, path + [next]))
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -64,7 +102,14 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        stack = [(starting_vertex, [starting_vertex])]
+        while stack:
+            (vertex, path) = stack.pop()
+            for next in self.vertices[vertex] - set(path):
+                if next == destination_vertex:
+                    return path + [next]
+                else:
+                    stack.append((next, path + [next]))
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
@@ -74,7 +119,20 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        print(self.dfs_recursive_visit(starting_vertex, destination_vertex, []))
+
+    def dfs_recursive_visit(self, starting_vertex, destination_vertex, path):
+        path = path + [starting_vertex]
+        if starting_vertex == destination_vertex:
+            return path
+        shortest = None
+        for node in self.vertices[starting_vertex]:
+            if node not in path:
+                newpath = self.dfs_recursive_visit(node, destination_vertex, path)
+                if newpath:
+                    if not shortest or len(newpath) < len(shortest):
+                        shortest = newpath
+        return shortest
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph

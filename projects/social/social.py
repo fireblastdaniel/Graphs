@@ -1,3 +1,6 @@
+from itertools import combinations
+from random import randint
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -45,8 +48,21 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for user in range(1, num_users + 1):
+            self.users[user] = User('Add a username')
+            self.friendships[user] = set()
 
         # Create friendships
+        all_friendships = list(combinations(list(range(1, num_users + 1)), 2))
+        random_ints = []
+        while len(random_ints) < avg_friendships * num_users / 2:
+            r = randint(0, len(all_friendships) - 1)
+            if r not in random_ints:
+                random_ints.append(r)
+
+        for f in random_ints:
+            self.friendships[all_friendships[f][1]].add(all_friendships[f][0])
+            self.friendships[all_friendships[f][0]].add(all_friendships[f][1])
 
     def get_all_social_paths(self, user_id):
         """
@@ -59,6 +75,16 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        queue = [(user_id, [user_id])]
+        while queue:
+            (vertex, path) = queue.pop(0)
+            for next in self.friendships[vertex] - set(path):
+                if vertex not in visited:
+                    visited[vertex] = path
+                for friend in self.friendships[vertex]:
+                    if friend not in visited:
+                        queue.append((friend, path + [friend]))
+
         return visited
 
 
